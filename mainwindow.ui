@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>371</width>
-    <height>425</height>
+    <height>440</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>10</x>
       <y>270</y>
       <width>351</width>
-      <height>111</height>
+      <height>131</height>
      </rect>
     </property>
     <property name="html">
@@ -28,13 +28,14 @@
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'PMingLiU'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;平均：&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;平均(最佳估計值)：&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;母體標準差：&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;標準差：&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;A類不確定度：&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;B類不確定度：&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;C類不確定度：&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;計算結果：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;(樣本)標準差：&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;A類(隨機)不確定度：&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;B類(系統)不確定度：&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;C類(組合)不確定度：&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;最終計算結果：&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;不確定度百分比：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="label">
@@ -83,6 +84,9 @@ p, li { white-space: pre-wrap; }
            <height>121</height>
           </rect>
          </property>
+         <property name="plainText">
+          <string/>
+         </property>
         </widget>
        </widget>
       </widget>
@@ -94,20 +98,20 @@ p, li { white-space: pre-wrap; }
      <rect>
       <x>10</x>
       <y>160</y>
-      <width>91</width>
+      <width>111</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
-     <string>儀器最小單位：</string>
+     <string>量測儀器最小讀數：：</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="minimumValue">
     <property name="geometry">
      <rect>
-      <x>100</x>
+      <x>120</x>
       <y>160</y>
-      <width>261</width>
+      <width>241</width>
       <height>21</height>
      </rect>
     </property>
@@ -205,18 +209,8 @@ p, li { white-space: pre-wrap; }
    </property>
    <widget class="QMenu" name="menu">
     <property name="title">
-     <string>關於</string>
+     <string>更多</string>
     </property>
-    <widget class="QMenu" name="menu_2">
-     <property name="title">
-      <string>關於誤差</string>
-     </property>
-     <addaction name="action_double_2"/>
-     <addaction name="action_2"/>
-     <addaction name="action_bug"/>
-    </widget>
-    <addaction name="menu_2"/>
-    <addaction name="separator"/>
     <addaction name="action"/>
    </widget>
    <addaction name="menu"/>
@@ -224,22 +218,7 @@ p, li { white-space: pre-wrap; }
   <widget class="QStatusBar" name="statusbar"/>
   <action name="action">
    <property name="text">
-    <string>Made by Goodbunbun</string>
-   </property>
-  </action>
-  <action name="action_double_2">
-   <property name="text">
-    <string>由於本程式使用雙精度浮點數(double)儲存數值，因此會有些許誤差</string>
-   </property>
-  </action>
-  <action name="action_bug">
-   <property name="text">
-    <string>但｢確定｣按鈕請不要一直按，按太快可能會有bug</string>
-   </property>
-  </action>
-  <action name="action_2">
-   <property name="text">
-    <string>若計算結果很奇怪，可以多按幾次｢確定｣</string>
+    <string>關於</string>
    </property>
   </action>
  </widget>

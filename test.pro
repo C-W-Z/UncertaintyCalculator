@@ -9,13 +9,16 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    frame.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
+    frame.h \
     mainwindow.h
 
 FORMS += \
+    frame.ui \
     mainwindow.ui
 
 TRANSLATIONS += \
@@ -28,3 +31,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     Resources.qrc
+
+RC_FILE = icon.rc
