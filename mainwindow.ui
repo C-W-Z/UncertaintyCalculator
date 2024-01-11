@@ -35,12 +35,12 @@
        <rect>
         <x>10</x>
         <y>6</y>
-        <width>181</width>
+        <width>191</width>
         <height>20</height>
        </rect>
       </property>
       <property name="text">
-       <string>&lt;span style=&quot;  font-size:10pt;&quot;&gt;輸入數據(每個數據以換行分隔)：&lt;/span&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;輸入數據(每個數據以換行分隔)：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
      <widget class="QSpinBox" name="spinBox">
@@ -53,7 +53,7 @@
        </rect>
       </property>
       <property name="maximum">
-       <number>30</number>
+       <number>15</number>
       </property>
       <property name="value">
        <number>2</number>
@@ -200,6 +200,19 @@ p, li { white-space: pre-wrap; }
        <string/>
       </property>
      </widget>
+     <widget class="QLabel" name="label_21">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>10</y>
+        <width>91</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#ff0000;&quot;&gt;只能輸入數字！&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
@@ -251,7 +264,7 @@ p, li { white-space: pre-wrap; }
        <string>   ±</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="Yuncertianty">
+     <widget class="QLineEdit" name="Yuncertainty">
       <property name="geometry">
        <rect>
         <x>220</x>
@@ -435,7 +448,7 @@ p, li { white-space: pre-wrap; }
        </rect>
       </property>
       <property name="maximum">
-       <number>30</number>
+       <number>15</number>
       </property>
       <property name="value">
        <number>2</number>
@@ -564,7 +577,6 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>更多</string>
     </property>
-    <addaction name="instructions"/>
     <addaction name="about"/>
    </widget>
    <addaction name="menu"/>
@@ -577,7 +589,7 @@ p, li { white-space: pre-wrap; }
   </action>
   <action name="instructions">
    <property name="text">
-    <string>使用說明</string>
+    <string>原理</string>
    </property>
   </action>
  </widget>

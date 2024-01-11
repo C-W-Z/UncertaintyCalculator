@@ -332,17 +332,17 @@ QString ChangeType(double data)
     }
 }
 
-double ifpercentage(double d, QString u)
+double ifpercentage(QString x)
 {
     double r = 0;
-    if(u.endsWith('%', Qt::CaseInsensitive))
+    for(int i=0;i<(int)x.length();i++)
     {
-        u.truncate(u.length()-1);
-        r = d * u.toDouble() / 100;
-    }
-    else
-    {
-        r = u.toDouble();
+        if(x[i] == '%')
+        {
+
+            break;
+        }
+
     }
     return r;
 }
@@ -452,7 +452,7 @@ void MainWindow::on_EnterButton_clicked()
 
 void MainWindow::on_about_triggered()
 {
-    f1->resize(300,400);
+    f1->resize(264,320);
     f1->setMinimumSize(264, 320);
     f1->setMaximumSize(720, 840);
     f1->setWindowTitle("關於Uncertainty Calculator");
@@ -479,10 +479,11 @@ void MainWindow::on_equalsButton_clicked()
     x.data = (ui->Xdata->text()).toDouble();
     y.data = (ui->Ydata->text()).toDouble();
     z.data = (ui->Zdata->text()).toDouble();
+    QString xu = ui->Xuncertainty->text();
 
-    x.uncertainty = ifpercentage(x.data, ui->Xuncertainty->text());
-    y.uncertainty = ifpercentage(y.data, ui->Yuncertainty->text());
-    z.uncertainty = ifpercentage(z.data, ui->Zuncertainty->text());
+    x.uncertainty = (ui->Xuncertainty->text()).toDouble();
+    y.uncertainty = (ui->Yuncertianty->text()).toDouble();
+    z.uncertainty = (ui->Zuncertainty->text()).toDouble();
     F = ui->Formula->text();
 
     c.Input(x,y,z);

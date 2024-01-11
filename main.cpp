@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     font.setPointSize(10);
     qApp->setFont(font);
     w.setFixedSize(396,533);
-    w.setWindowTitle("Uncertainty Calculator v1.3");
+    w.setWindowTitle("Uncertainty Calculator v1.4");
     w.setWindowIcon(QIcon(":/icon_256x256.ico"));
     w.show();
     return a.exec();
