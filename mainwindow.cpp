@@ -105,6 +105,7 @@ class Calculator
         }
         QString& getResult(std::string exp)
         {
+            exp.erase(remove_if(exp.begin(), exp.end(), isspace), exp.end()); //跳過空格
             if (exp == "")
             {
                 result = "請輸入運算式";
@@ -114,7 +115,6 @@ class Calculator
             std::stack<char> s1,s2;
             s1.push('#');         //以#號作為標記
             char temp;
-            exp.erase(remove_if(exp.begin(), exp.end(), isspace), exp.end()); //跳過空格
             for(int i=0; i<(int)exp.length(); i++)
             {                 //生成逆波蘭式
                 if ((exp[i] >= '0' && exp[i] <= '9') || exp[i] == '.' || (exp[i] >= 'X' && exp[i] <= 'Z'))
