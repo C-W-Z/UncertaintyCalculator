@@ -1,0 +1,19 @@
+#include "frame.h"
+#include "ui_frame.h"
+
+
+Frame::Frame(QWidget *parent)
+    : QFrame(parent)
+    , ui(new Ui::Frame)
+{
+    ui->setupUi(this);
+    if(state == 1)
+    {
+        ui->textBrowser->setHtml("");
+    }
+}
+
+Frame::~Frame()
+{
+    delete ui;
+}
