@@ -3,7 +3,11 @@
 #include <QtMath>
 #include <QVector>
 #include <QString>
-#include <QDebug>
+#include <stack>
+#include <string>
+
+QString ChangeType(double);
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -11,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     f1 = new About;
     f2 = new Instructions;
+    ui->calculateResult->setFontPointSize(10);
 }
 
 MainWindow::~MainWindow()
@@ -18,6 +23,250 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+class Uncertainty
+{
+private:
+    double Upow(double data, double u, double n)
+    {
+        return qPow(data, n) * qSqrt(qAbs(n) * qPow(u/data, 2));
+    }
+public:
+    double data = 0;
+    double uncertainty = 0;
+
+    Uncertainty(double a, double b)
+    {
+        data = a;
+        uncertainty = b;
+    }
+    Uncertainty(double a)
+    {
+        data = a;
+    }
+    Uncertainty(){}
+    bool operator==(const Uncertainty& un2)
+    {
+        return (this->data==un2.data) && (this->uncertainty==un2.uncertainty);
+    }
+
+    Uncertainty operator+(const Uncertainty& un2)
+    {
+        Uncertainty r;
+        r.data = this->data + un2.data;
+        r.uncertainty = qSqrt(qPow(this->uncertainty, 2) + qPow(un2.uncertainty, 2));
+        return r;
+    }
+    Uncertainty operator-(const Uncertainty& un2)
+    {
+        Uncertainty r;
+        r.data = this->data - un2.data;
+        r.uncertainty = qSqrt(qPow(this->uncertainty, 2) + qPow(un2.uncertainty, 2));
+        return r;
+    }
+    Uncertainty operator*(const Uncertainty& un2)
+    {
+        Uncertainty r;
+        r.data = this->data * un2.data;
+        if(un2.uncertainty == 0)
+            r.uncertainty = this->uncertainty * un2.data;
+        else if(this->uncertainty == 0)
+            r.uncertainty = this->data * un2.uncertainty;
+        else
+            r.uncertainty = qAbs(r.data) * qSqrt(qPow(this->uncertainty / this->data, 2) + qPow(un2.uncertainty / un2.data, 2));
+        return r;
+    }
+    Uncertainty operator/(const Uncertainty& un2)
+    {
+        Uncertainty r;
+        r.data = this->data / un2.data;
+        if(un2.uncertainty == 0)
+            r.uncertainty = this->uncertainty / un2.data;
+        else if(this->uncertainty == 0)
+            r.uncertainty = this->data * Upow(un2.data, un2.uncertainty,-1);
+        else
+            r.uncertainty = qAbs(r.data) * qSqrt(qPow(this->uncertainty / this->data, 2) + qPow(un2.uncertainty / un2.data, 2));
+        return r;
+    }
+};
+
+class Calculator
+{
+    private:
+        std::string Polish;
+        Uncertainty X,Y,Z;
+        QString result;
+    public:
+        Calculator(){}
+        void Input(Uncertainty x,Uncertainty y, Uncertainty z)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+        }
+        QString& getResult(std::string exp)
+        {
+            Polish.clear();
+            std::stack<char> s1,s2;
+            s1.push('#');         //以#号作为标记
+            char temp;
+            for(int i=0; i<(int)exp.length(); i++)
+            {                 //利用两个堆栈生成逆波兰式
+                if ((exp[i] >= '0' && exp[i] <= '9')||exp[i] == '.'||(exp[i] >= 'X' && exp[i] <= 'Z'))
+                {
+                    s2.push(exp[i]);
+                }
+                else if (exp[i] == '+' || exp[i] == '-' ||exp[i] == '*' ||exp[i] == '/')
+                {
+                    if(i == (int)exp.length()-1){result = "Error";return result;}
+                    s2.push('#');
+                    temp = s1.top();
+                    if(temp == '#' || (temp == '+' || temp == '-') && (exp[i] == '*' ||exp[i] == '/'))
+                    {
+                        s1.push(exp[i]);
+                    }
+                    else
+                    {
+                        while (!(temp=='#'||temp == '(' || (temp == '+' || temp == '-') && (exp[i] == '*' ||exp[i] == '/')))
+                        {
+                            s2.push(temp);
+                            s1.pop();
+                            temp = s1.top();
+                        }
+                        s1.push(exp[i]);
+                    }
+                }
+                else if(exp[i] == ')'|| exp[i] == '(')
+                {
+                    if(exp[i] == '(')
+                    {
+                        s1.push(exp[i]);
+                        if(i == (int)exp.length()-1){result = "Error";return result;}
+                    }
+                    else
+                    {
+                        temp = s1.top();
+                        while (temp != '(' )
+                        {
+                            s2.push(temp);
+                            s1.pop();
+                            temp = s1.top();
+                        }
+                        s1.pop();
+                    }
+                }
+                else
+                {
+                    if(exp[i] == 'x')
+                    {
+                        result = "請將字元 x 換成 X";
+                    }
+                    else if(exp[i] == 'y')
+                    {
+                        result = "請將字元 y 換成 Y";
+                    }
+                    else if(exp[i] == 'z')
+                    {
+                        result = "請將字元 z 換成 Z";
+                    }
+                    else
+                    {
+                        result = "Error\n字元 " + (QString)exp[i] + " 無法解讀";
+                    }
+                    return result;
+                }
+            }
+            while(s1.top()!='#')
+            {
+                s2.push(s1.top());
+                s1.pop();
+            }
+            for(;s2.size()>=1;)
+            {
+                Polish.push_back(s2.top());
+                s2.pop();
+            }
+            Uncertainty temp2;
+            Uncertainty temp3;
+            Uncertainty temp1(0);
+            std::stack<Uncertainty> s3;
+            int sign = 0;
+            int n = 0;
+            for(int i = Polish.length()-1; i >= 0; i--)
+            {   //进行逆波兰式的运算
+                if(Polish[i] == '.')
+                {
+                    sign = 2;
+                    n = 0;
+                }
+                if(Polish[i] >= '0' && Polish[i] <= '9')
+                {
+                    if(sign == 2)
+                    {
+                        n++;
+                        temp1.data = temp1.data + (float)(Polish[i]-'0')/qPow(10,n);
+                    }
+                    else
+                    {
+                        temp1.data = temp1.data*10 +  Polish[i]-'0';
+                        sign = 1;
+                    }
+                }
+                if(Polish[i] >= 'X' && Polish[i] <= 'Z')
+                {
+                    if(Polish[i] == 'X')
+                    {
+                        temp1 = X;
+                    }
+                    else if(Polish[i] == 'Y')
+                    {
+                        temp1 = Y;
+                    }
+                    else if(Polish[i] == 'Z')
+                    {
+                        temp1 = Z;
+                    }
+                    sign = 1;
+                }
+
+                if((Polish[i] == '#'||Polish[i] == '+'||Polish[i] == '-'||Polish[i] == '*'||Polish[i] == '/')&&(sign == 1 || sign == 2)||(i == 0&&(sign == 1 || sign == 2)))
+                {
+                    if(sign == 1 || sign == 2)
+                    {
+                        s3.push(temp1);
+                        temp1 = 0;
+                        sign = 0;
+                    }
+                }
+                if(Polish[i] == '+'||Polish[i] == '-'||Polish[i] == '*'||Polish[i] == '/')   //計算
+                {
+                    temp2 = s3.top();
+                    s3.pop();
+                    temp3 = s3.top();
+                    s3.pop();
+                    switch(Polish[i])
+                    {
+                        case '+':
+                            s3.push(temp3+temp2);break;
+                        case '-':
+                            s3.push(temp3-temp2);break;
+                        case '*':
+                            s3.push(temp3*temp2);break;
+                        case '/':
+                            s3.push(temp3/temp2);break;
+                    }
+                    result = ChangeType(s3.top().data);
+                    result.append(" ± "+ChangeType(s3.top().uncertainty));
+                }
+            }
+            return result;
+        }
+};
+
+int digit1 = 2;
+int digit2 = 2;
+int state1 = 0;
+int state2 = 0;
+int Index = 0;
 int showD = 2;
 bool Scientific = false;
 double average = 0;
@@ -32,11 +281,22 @@ QStringList list;
 
 QString ChangeType(double data)
 {
+    if(Index == 0)
+    {
+        showD = digit1;
+        Scientific = state1;
+    }
+    else if(Index == 1)
+    {
+        showD = digit2;
+        Scientific = state2;
+    }
+
     QString first, last;
     int n = 0;
     if(Scientific)
     {
-        while(abs(data) > 10)
+        while(qAbs(data) > 10)
         {
             data /= 10;
             n++;
@@ -164,11 +424,6 @@ void MainWindow::on_EnterButton_clicked()
     data.clear();
 }
 
-void MainWindow::on_spinBox_valueChanged(int arg1)
-{
-    showD = arg1;
-}
-
 void MainWindow::on_about_triggered()
 {
     f1->resize(264,320);
@@ -189,14 +444,49 @@ void MainWindow::on_instructions_triggered()
     f2->show();
 }
 
+void MainWindow::on_equalsButton_clicked()
+{
+    Calculator c;
+
+    QString F;
+    Uncertainty x,y,z;
+    x.data = (ui->Xdata->text()).toDouble();
+    y.data = (ui->Ydata->text()).toDouble();
+    z.data = (ui->Zdata->text()).toDouble();
+    x.uncertainty = (ui->Xuncertainty->text()).toDouble();
+    y.uncertainty = (ui->Yuncertianty->text()).toDouble();
+    z.uncertainty = (ui->Zuncertainty->text()).toDouble();
+    F = ui->Formula->text();
+
+    if(F == "")
+        return;
+
+    c.Input(x,y,z);
+    QString result = c.getResult((F.toStdString()));
+    ui->calculateResult_2->setText(result);
+}
+
+void MainWindow::on_spinBox_valueChanged(int arg1)
+{
+    digit1 = arg1;
+}
+
+void MainWindow::on_spinBox_2_valueChanged(int arg1)
+{
+    digit2 = arg1;
+}
+
+void MainWindow::on_tabWidget_currentChanged(int index)
+{
+    Index = index;
+}
+
 void MainWindow::on_Scientific_notation_stateChanged(int state)
 {
-    if(state == 2)
-    {
-        Scientific = true;
-    }
-    else if(state == 0)
-    {
-        Scientific = false;
-    }
+    state1 = state;
+}
+
+void MainWindow::on_Scientific_notation_2_stateChanged(int state)
+{
+    state2 = state;
 }
