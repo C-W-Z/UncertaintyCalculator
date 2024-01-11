@@ -2,7 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <frame.h>
+#include <about.h>
+#include <instructions.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -21,11 +22,15 @@ private slots:
 
     void on_spinBox_valueChanged(int arg1);
 
-    void on_action_triggered();
+    void on_about_triggered();
+
+    void on_instructions_triggered();
+
+    void on_Scientific_notation_stateChanged(int arg1);
 
 private:
     Ui::MainWindow *ui;
-    Frame *f;
-
+    About *f1;
+    Instructions *f2;
 };
 #endif // MAINWINDOW_H

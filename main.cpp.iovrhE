@@ -6,11 +6,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-    QFont font;
-    font.setFamily("Microsoft JhengHei");
-    font.setPointSize(10);
-    qApp->setFont(font);
-    w.setFixedSize(396,525);
+    w.setFixedSize(371,440);
     w.setWindowTitle("Uncertainty Calculator v1.2");
     w.setWindowIcon(QIcon(":/icon_256x256.ico"));
     w.show();

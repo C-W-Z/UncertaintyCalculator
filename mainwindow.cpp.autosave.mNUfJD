@@ -9,8 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    f1 = new About;
-    f2 = new Instructions;
+    f = new Frame;
 }
 
 MainWindow::~MainWindow()
@@ -123,7 +122,7 @@ void MainWindow::on_EnterButton_clicked()
 	if(needRecalculate)
 	{
         ui->calculateResult->append("重新計算中...");
-
+        
 		average = 0;
 		MStandard_Deviation = 0;
     	Standard_Deviation = 0;
@@ -169,24 +168,14 @@ void MainWindow::on_spinBox_valueChanged(int arg1)
     showD = arg1;
 }
 
-void MainWindow::on_about_triggered()
+void MainWindow::on_action_triggered()
 {
-    f1->resize(264,320);
-    f1->setMinimumSize(264, 320);
-    f1->setMaximumSize(720, 840);
-    f1->setWindowTitle("關於Uncertainty Calculator");
-    f1->setWindowIcon(QIcon(":/icon_256x256.ico"));
-    f1->show();
-}
-
-void MainWindow::on_instructions_triggered()
-{
-    f2->resize(264,320);
-    f2->setMinimumSize(264, 320);
-    f2->setMaximumSize(720, 840);
-    f2->setWindowTitle("使用說明");
-    f2->setWindowIcon(QIcon(":/icon_256x256.ico"));
-    f2->show();
+    f->resize(264,320);
+    f->setMinimumSize(264, 320);
+    f->setMaximumSize(720, 840);
+    f->setWindowTitle("關於");
+    f->setWindowIcon(QIcon(":/icon_256x256.ico"));
+    f->show();
 }
 
 void MainWindow::on_Scientific_notation_stateChanged(int state)
